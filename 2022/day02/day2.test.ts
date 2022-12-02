@@ -1,12 +1,29 @@
 import { expect, it } from "vitest";
 import { readStrategy } from "./readStrategy";
-import { mapCodeToShapeToGetExpectedResult, strategy2 } from "./strategy2";
+import { strategy2 } from "./strategy2";
 
 const testInput = `
 A Y
 B X
 C Z
 `;
+
+it("Compute the score of a game", () => {
+  const game = readStrategy(testInput);
+  expect(game.playersScore[1]).toBe(15);
+});
+
+it("Compute the score of a game with enhanced strategy", () => {
+  const game = readStrategy(testInput, strategy2);
+  expect(game.playersScore[1]).toBe(12);
+});
+
+it("Result", () => {
+  const game = readStrategy(input);
+  console.log("Result strategy 1 : ", game.playersScore[1]);
+  const game2 = readStrategy(input, strategy2);
+  console.log("Result strategy 2 : ", game2.playersScore[1]);
+});
 
 const input = `
 B X
@@ -2510,20 +2527,3 @@ A Y
 A Y
 C Z
 `;
-
-it("Compute the score of a game", () => {
-  const game = readStrategy(testInput);
-  expect(game.playersScore[1]).toBe(15);
-});
-
-it("Compute the score of a game with enhanced strategy", () => {
-  const game = readStrategy(testInput, strategy2);
-  expect(game.playersScore[1]).toBe(12);
-});
-
-it("Result", () => {
-  const game = readStrategy(input);
-  console.log("Result strategy 1 : ", game.playersScore[1]);
-  const game2 = readStrategy(input, strategy2);
-  console.log("Result strategy 2 : ", game2.playersScore[1]);
-});

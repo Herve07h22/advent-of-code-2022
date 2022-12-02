@@ -18,6 +18,32 @@ const testInput = `
 10000
 `;
 
+it("Compute the nb of elves", () => {
+  const elves = buildElvesFromReport(testInput);
+  expect(elves.calories).toHaveLength(5);
+});
+
+it("Find the index of Elf carrying the most Calories", () => {
+  const elves = buildElvesFromReport(testInput);
+  expect(elves.maxCalories()).toBe(24000);
+});
+
+it("Find the index of Elf carrying the most Calories", () => {
+  const elves = buildElvesFromReport(testInput);
+  expect(elves.computeTop(3)).toBe(45000);
+});
+
+it("Print the result of the challenge", () => {
+  console.log(
+    "Result of the challenge DAY 1 maxCalories : ",
+    buildElvesFromReport(input).maxCalories()
+  );
+  console.log(
+    "Result of the challenge DAY 1 computeTop : ",
+    buildElvesFromReport(input).computeTop(3)
+  );
+});
+
 const input = `
 2936
 2154
@@ -2262,29 +2288,3 @@ const input = `
 1445
 9978
 `;
-
-it("Compute the nb of elves", () => {
-  const elves = buildElvesFromReport(testInput);
-  expect(elves.calories).toHaveLength(5);
-});
-
-it("Find the index of Elf carrying the most Calories", () => {
-  const elves = buildElvesFromReport(testInput);
-  expect(elves.maxCalories()).toBe(24000);
-});
-
-it("Find the index of Elf carrying the most Calories", () => {
-  const elves = buildElvesFromReport(testInput);
-  expect(elves.computeTop(3)).toBe(45000);
-});
-
-it("Print the result of the challenge", () => {
-  console.log(
-    "Result of the challenge DAY 1 maxCalories : ",
-    buildElvesFromReport(input).maxCalories()
-  );
-  console.log(
-    "Result of the challenge DAY 1 computeTop : ",
-    buildElvesFromReport(input).computeTop(3)
-  );
-});
