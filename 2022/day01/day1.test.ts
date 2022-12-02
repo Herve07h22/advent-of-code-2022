@@ -1,5 +1,5 @@
 import { expect, it } from "vitest";
-import { buildElvesFromReport } from "../elf/buildElvesFromReport";
+import { buildElvesFromReport } from "./buildElvesFromReport";
 
 const testInput = `
 1000
@@ -2273,9 +2273,18 @@ it("Find the index of Elf carrying the most Calories", () => {
   expect(elves.maxCalories()).toBe(24000);
 });
 
+it("Find the index of Elf carrying the most Calories", () => {
+  const elves = buildElvesFromReport(testInput);
+  expect(elves.computeTop(3)).toBe(45000);
+});
+
 it("Print the result of the challenge", () => {
   console.log(
-    "Result of the challenge DAY 1 : ",
+    "Result of the challenge DAY 1 maxCalories : ",
     buildElvesFromReport(input).maxCalories()
+  );
+  console.log(
+    "Result of the challenge DAY 1 computeTop : ",
+    buildElvesFromReport(input).computeTop(3)
   );
 });
