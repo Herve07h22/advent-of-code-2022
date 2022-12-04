@@ -35,11 +35,11 @@ it("Find the index of Elf carrying the most Calories", () => {
 
 it("Print the result of the challenge", () => {
   console.log(
-    "Result of the challenge DAY 1 maxCalories : ",
+    "Result day 01 maxCalories : ",
     buildElvesFromReport(input).maxCalories()
   );
   console.log(
-    "Result of the challenge DAY 1 computeTop : ",
+    "Result day 01 computeTop : ",
     buildElvesFromReport(input).computeTop(3)
   );
 });

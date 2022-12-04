@@ -20,9 +20,9 @@ it("Compute the score of a game with enhanced strategy", () => {
 
 it("Result", () => {
   const game = readStrategy(input);
-  console.log("Result strategy 1 : ", game.playersScore[1]);
+  console.log("Result day 02 strategy 1 : ", game.playersScore[1]);
   const game2 = readStrategy(input, strategy2);
-  console.log("Result strategy 2 : ", game2.playersScore[1]);
+  console.log("Result day 02 strategy 2 : ", game2.playersScore[1]);
 });
 
 const input = `
