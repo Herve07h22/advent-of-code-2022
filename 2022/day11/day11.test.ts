@@ -1,14 +1,8 @@
 import { it, expect } from "vitest";
-
-type Monkey = {
-  items: number[];
-  operation: string; // * +
-  amount: string; // number or "old"
-  test: number;
-  trueMonkey: number;
-  falseMonkey: number;
-  inspectCount: number;
-};
+import { getInspectionMetrics } from "./getInspectionMetrics";
+import { inspectAll, inspectionRounds } from "./inspectAll";
+import { inspectItem, optimizedInspectItem } from "./inspectItem";
+import { readInstructions } from "./readInstructions";
 
 it("Can read the instructions to build the monkeys", () => {
     const monkeys = readInstructions(testInput)
@@ -68,100 +62,6 @@ it("Result", () => {
     const result2 = getInspectionMetrics(monkeys2, 10000 , optimizedInspectItem)
     console.log(`Day 10 phase 2 : ${result2}`)
 })
-
-const getInspectionMetrics: (monkeys:Monkey[], nbOfRounds:number, inspectionFunction:InpectionFunction) => number = (monkeys, nbOfRounds, inspectionFunction) => {
-    const inspections = inspectionRounds(monkeys, nbOfRounds, inspectionFunction).map(monkey => monkey.inspectCount).sort( (a, b) => b-a)
-    return inspections[0]*inspections[1]
-}
-
-
-const inspectionRounds: (monkeys:Monkey[], nbOfRounds:number, inspectionFunction:InpectionFunction)=> Monkey[] = (monkeys, nbOfRounds, inspectionFunction) => {
-    if (nbOfRounds ===0) return monkeys
-    const updatedMonkeys = inspectAll(monkeys, 0, inspectionFunction)
-    // console.log("== After round ", nbOfRounds)
-    // updatedMonkeys.forEach( (monkey, index) => console.log(`Monkey ${index} inspected items ${monkey.inspectCount} times`))
-    return inspectionRounds(updatedMonkeys, nbOfRounds-1, inspectionFunction)
-}
-type InpectionFunction = (monkey:Monkey, divisor?:number) => { destination? : {worryLevel:number, destinationMonkey:number}, updatedMonkey:Monkey }
-
-const inspectItem : InpectionFunction = (monkey) => {
-    if (monkey.items.length === 0) return {updatedMonkey:monkey}
-    const [item, ...otherItems] = monkey.items
-    const updatedMonkey = {...monkey, items:otherItems, inspectCount:monkey.inspectCount+1}
-    const worryLevel = Math.floor(calculate(item, monkey.operation, monkey.amount) / 3)
-    const testResult =  (worryLevel % monkey.test) === 0
-    return {destination : {worryLevel, destinationMonkey:testResult ? monkey.trueMonkey : monkey.falseMonkey}, updatedMonkey}
-}
-
-const optimizedInspectItem : InpectionFunction = (monkey, divisor=3) => {
-    if (monkey.items.length === 0) return {updatedMonkey:monkey}
-    const [item, ...otherItems] = monkey.items
-    const updatedMonkey = {...monkey, items:otherItems, inspectCount:monkey.inspectCount+1}
-    const worryLevel = calculate(item, monkey.operation, monkey.amount) % divisor
-    const testResult =  (worryLevel % monkey.test) === 0
-    return {destination : {worryLevel, destinationMonkey:testResult ? monkey.trueMonkey : monkey.falseMonkey}, updatedMonkey}
-}
-
-
-function calculate (item:number, operation:string, amount:string) {
-    const value = amount === "old" ? item : parseInt(amount)
-    switch (operation) {
-        case '+' : return item + value 
-        case "*" : return item * value
-        default : throw new Error(`Operation ${operation} not supported`)
-    }
-}
-
-
-const inspectAll: (monkeys:Monkey[], startIndex:number, inspectionFunction:InpectionFunction)=> Monkey[] = (monkeys, startIndex, inspectionFunction) => {
-    const updatedMonkeys = [...monkeys]
-    for (let index=startIndex; index<updatedMonkeys.length; index++) {
-        // console.log("Inspecting ", updatedMonkeys[index])
-        const divisor = monkeys.reduce((d, monkey) => d * monkey.test, 1);
-        const {destination, updatedMonkey} = inspectionFunction(updatedMonkeys[index], divisor)
-            if (destination) {
-                updatedMonkeys[destination.destinationMonkey].items.push(destination.worryLevel)
-                updatedMonkeys[index] = updatedMonkey
-                // console.log("Updated monkey :", updatedMonkey)
-                return inspectAll(updatedMonkeys, index, inspectionFunction)
-            }
-    }
-    return updatedMonkeys
-}
-
-
-
-const readInstructions: (text: string) => Monkey[] = (text) =>
-  text
-    .trim()
-    .split("\n\n")
-    .map((monkey) => {
-      let split = monkey.split("\n");
-      let items = split[1]
-        .replace("Starting items: ", "")
-        .split(", ")
-        .map((num) => parseInt(num));
-      let operationSplit = split[2].split(" ");
-      let operation = operationSplit.slice(-2)[0];
-      let amount = operationSplit.slice(-1)[0];
-      let test = parseInt(split[3].replace("Test: divisible by ", ""));
-      let trueMonkey = parseInt(
-        split[4].replace("If true: throw to monkey ", "")
-      );
-      let falseMonkey = parseInt(
-        split[5].replace("If false: throw to monkey ", "")
-      );
-
-      return {
-        items,
-        operation,
-        amount,
-        test,
-        trueMonkey,
-        falseMonkey,
-        inspectCount: 0,
-      };
-    });
 
 const testInput = `
 Monkey 0:
